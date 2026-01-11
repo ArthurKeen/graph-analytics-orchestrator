@@ -1,6 +1,6 @@
 # Graph Analytics Orchestrator
 
-A unified Python library for orchestrating ArangoDB Graph Analytics Engine (GAE) operations across both Arango Managed Platform (AMP) and self-managed deployments. Scope is limited to GAE orchestration (deploy -> load -> analyze -> store -> cleanup); LLM/agentic workflows and PRD/use-case generation are out of scope.
+A unified Python library for orchestrating ArangoDB Graph Analytics Engine (GAE) operations across both Arango Managed Platform (AMP) and self-managed deployments. Scope is limited to GAE orchestration (deploy -> load -> analyze -> store -> cleanup).
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
