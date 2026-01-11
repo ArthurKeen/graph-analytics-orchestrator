@@ -324,7 +324,7 @@ class GAEManager(GAEConnectionBase):
             
             self.access_token = token
             self.token_created_at = datetime.now()
-            print(f"✓ Token refreshed successfully at {self.token_created_at.strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"OK: Token refreshed successfully at {self.token_created_at.strftime('%Y-%m-%d %H:%M:%S')}")
             
         except subprocess.CalledProcessError as e:
             error_msg = f"Failed to generate token: {e.stderr}"
@@ -470,7 +470,7 @@ class GAEManager(GAEConnectionBase):
         engine_details = self._wait_for_engine_ready(self.current_engine_id)
         
         self.current_engine_url = engine_details['status']['endpoint']
-        print(f"✓ Engine deployed successfully: {self.current_engine_id}")
+        print(f"OK: Engine deployed successfully: {self.current_engine_id}")
         print(f"  Engine URL: {self.current_engine_url}")
         
         # Additional wait for API endpoints to be ready
@@ -493,7 +493,7 @@ class GAEManager(GAEConnectionBase):
             self.current_engine_id = None
             self.current_engine_url = None
         
-        print("✓ Engine deleted successfully")
+        print("OK: Engine deleted successfully")
         return result
     
     def _wait_for_engine_ready(self, engine_id: str, timeout: int = 60) -> Dict[str, Any]:
@@ -523,7 +523,7 @@ class GAEManager(GAEConnectionBase):
         while time.time() - start_time < timeout:
             try:
                 self.get_engine_version()
-                print("✓ Engine API is ready")
+                print("OK: Engine API is ready")
                 return
             except Exception as e:
                 last_error = e
@@ -836,7 +836,7 @@ class GenAIGAEConnection(GAEConnectionBase):
                     # Test connection by checking version
                     self._get_engine_url()  # Ensures URL is constructed correctly
                     self.get_engine_version()
-                    print(f"✓ Service {service_id} is ready")
+                    print(f"OK: Service {service_id} is ready")
                     return service_id
                 except Exception:
                     if i % 5 == 0:  # Log every 5th attempt to avoid spam

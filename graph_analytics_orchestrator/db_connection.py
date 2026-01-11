@@ -39,7 +39,7 @@ def get_db_connection():
     # Check connection
     try:
         sys_db.version()
-        print(f"✓ Successfully connected to ArangoDB at {endpoint}")
+        print(f"OK: Successfully connected to ArangoDB at {endpoint}")
     except Exception as e:
         # Don't expose password in error messages
         error_msg = str(e).replace(password, '***MASKED***')
@@ -100,7 +100,7 @@ def get_db_connection():
             )
     
     db = client.db(database, username=username, password=password, verify=verify_ssl)
-    print(f"✓ Connected to database: {database}")
+    print(f"OK: Connected to database: {database}")
     
     return db
 

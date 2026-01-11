@@ -35,7 +35,7 @@ This library provides a unified interface for orchestrating ArangoDB Graph Analy
 - Comprehensive error handling and retry logic
 - Support for batch analysis workflows
 - Configuration via environment variables (.env file)
-- **Scope:** Orchestration of GAE jobs (deploy → load → analyze → store → cleanup) with robust error handling and cost tracking
+- **Scope:** Orchestration of GAE jobs (deploy -> load -> analyze -> store -> cleanup) with robust error handling and cost tracking
 
 ---
 
@@ -195,16 +195,16 @@ config = AnalysisConfig(
 
 ```
 graph_analytics_orchestrator/
-├── __init__.py          # Public API
-├── config.py            # Configuration management
-├── constants.py         # Shared constants
-├── db_connection.py     # ArangoDB connection
-├── gae_connection.py    # GAE connection (AMP & self-managed)
-├── gae_orchestrator.py  # Workflow orchestration
-├── results.py           # Result management helpers
-├── queries.py           # Query helpers
-├── export.py            # Export utilities
-└── utils.py             # Shared utilities
+|-- __init__.py          # Public API
+|-- config.py            # Configuration management
+|-- constants.py         # Shared constants
+|-- db_connection.py     # ArangoDB connection
+|-- gae_connection.py    # GAE connection (AMP & self-managed)
+|-- gae_orchestrator.py  # Workflow orchestration
+|-- results.py           # Result management helpers
+|-- queries.py           # Query helpers
+|-- export.py            # Export utilities
+`-- utils.py             # Shared utilities
 ```
 
 ### 6.2 Connection Abstraction
@@ -222,7 +222,7 @@ A factory function (`get_gae_connection()`) automatically selects the appropriat
 ### 7.1 Functional Requirements
 
 -  Support both AMP and self-managed deployments
--  Automate complete workflow (deploy → load → analyze → store → cleanup)
+-  Automate complete workflow (deploy -> load -> analyze -> store -> cleanup)
 -  Support all major graph algorithms
 -  Handle errors gracefully with retry logic
 -  Track costs for AMP deployments
@@ -239,12 +239,12 @@ A factory function (`get_gae_connection()`) automatically selects the appropriat
 
 ## 8. Scope Focus
 
-- Scope: GAE orchestration for AMP and self-managed deployments (deploy → load → analyze → store → cleanup).
+- Scope: GAE orchestration for AMP and self-managed deployments (deploy -> load -> analyze -> store -> cleanup).
 - Out of scope: LLM/agentic workflows, PRD/use-case/report generation.
 
 ## 9. Future Enhancements (Orchestration)
 
-- Reliability and DX: hardened retries/timeouts, better validation, clearer errors.
+-- Reliability and DX: hardened retries/timeouts, better validation, clearer errors.
 - Performance: batch execution optimizations, engine sizing guidance, resource cleanup.
 - Observability: structured logging, status/progress reporting, optional metrics/hooks.
 - Operations: runbooks, diagnostics/support bundles, improved CLI ergonomics.
@@ -252,9 +252,9 @@ A factory function (`get_gae_connection()`) automatically selects the appropriat
 
 ## 10. Implementation Roadmap (Orchestration)
 
-- **v1.1.0 — Reliability and DX:** retries/timeouts, config validation, CLI polish, more examples.
-- **v1.2.0 — Scaling and Performance:** workload benchmarks, engine sizing guidance, batch/path optimizations, parallelism controls.
-- **v1.3.0 — Observability and Ops:** metrics/hooks, status/progress reporting, better failure diagnostics, operational runbooks.
+- **v1.1.0 -- Reliability and DX:** retries/timeouts, config validation, CLI polish, more examples.
+- **v1.2.0 -- Scaling and Performance:** workload benchmarks, engine sizing guidance, batch/path optimizations, parallelism controls.
+- **v1.3.0 -- Observability and Ops:** metrics/hooks, status/progress reporting, better failure diagnostics, operational runbooks.
 
 ## 11. References
 
@@ -275,7 +275,7 @@ A factory function (`get_gae_connection()`) automatically selects the appropriat
 ## 12. Version History
 
 ### Version 1.1.0 (Planned)
-- Reliability and DX improvements (retries/timeouts, validation, CLI polish)
+-- Reliability and DX improvements (retries/timeouts, validation, CLI polish)
 - Additional examples and config guidance
 
 ### Version 1.0.0 (December 2025)

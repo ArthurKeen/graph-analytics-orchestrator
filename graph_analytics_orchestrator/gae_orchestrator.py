@@ -319,7 +319,7 @@ class GAEOrchestrator:
                 if hourly_cost > 0:  # Only calculate if we have cost data
                     result.estimated_cost_usd = (result.engine_runtime_minutes / 60) * hourly_cost
                 
-                self._log(f"✓ Analysis completed successfully!")
+                self._log(f"OK: Analysis completed successfully!")
                 self._log(f"  Duration: {result.duration_seconds:.1f}s ({result.engine_runtime_minutes:.1f} min)")
                 if result.estimated_cost_usd:
                     self._log(f"  Estimated cost: ${result.estimated_cost_usd:.4f}")
@@ -333,7 +333,7 @@ class GAEOrchestrator:
                 result.end_time = datetime.now()
                 result.duration_seconds = (result.end_time - result.start_time).total_seconds()
                 
-                self._log(f"✗ Analysis failed: {e}", "ERROR")
+                self._log(f"ERROR: Analysis failed: {e}", "ERROR")
                 
                 # Check if error is retryable
                 is_retryable = self._is_retryable_error(str(e))
@@ -388,7 +388,7 @@ class GAEOrchestrator:
             )
             
             result.engine_id = engine_info['id']
-            self._log(f"✓ Engine deployed: {result.engine_id}")
+            self._log(f"OK: Engine deployed: {result.engine_id}")
         except Exception as e:
             # If deployment fails, try to capture engine_id for cleanup
             if hasattr(self.gae, 'current_engine_id') and self.gae.current_engine_id and not result.engine_id:
@@ -428,7 +428,7 @@ class GAEOrchestrator:
             # Graph details may not be available immediately
             pass
         
-        self._log(f"✓ Graph loaded: {result.graph_id}")
+        self._log(f"OK: Graph loaded: {result.graph_id}")
         if result.vertex_count:
             self._log(f"  Vertices: {result.vertex_count:,}")
         if result.edge_count:
@@ -467,7 +467,7 @@ class GAEOrchestrator:
         
         execution_time = job_result.get('statistics', {}).get('execution_time_ms', 0) / 1000
         if execution_time > 0:
-            self._log(f"✓ Algorithm completed in {execution_time:.3f}s")
+            self._log(f"OK: Algorithm completed in {execution_time:.3f}s")
     
     def _store_results(self, result: AnalysisResult):
         """Store algorithm results back to database."""
@@ -492,7 +492,7 @@ class GAEOrchestrator:
         try:
             collection = self.db.collection(result.config.target_collection)
             result.documents_updated = collection.count()
-            self._log(f"✓ Results stored: {result.documents_updated:,} documents")
+            self._log(f"OK: Results stored: {result.documents_updated:,} documents")
         except Exception as e:
             self._log(f"Warning: Could not count stored documents: {e}", "WARN")
     
@@ -505,7 +505,7 @@ class GAEOrchestrator:
         
         try:
             self.gae.delete_engine(result.engine_id)
-            self._log(f"✓ Engine deleted (billing stopped)")
+            self._log(f"OK: Engine deleted (billing stopped)")
         finally:
             # Restore terminal status
             if original_status in [AnalysisStatus.COMPLETED, AnalysisStatus.FAILED]:
@@ -552,7 +552,7 @@ class GAEOrchestrator:
                 
                 if progress >= total and total > 0:
                     elapsed = time.time() - start_time
-                    self._log(f"  ✓ {description} completed ({elapsed:.1f}s)")
+                    self._log(f"  OK: {description} completed ({elapsed:.1f}s)")
                     return job
                 
                 current_status = f"{progress}/{total}"
@@ -570,7 +570,7 @@ class GAEOrchestrator:
                 
                 if status == 'succeeded':
                     elapsed = time.time() - start_time
-                    self._log(f"  ✓ {description} completed ({elapsed:.1f}s)")
+                    self._log(f"  OK: {description} completed ({elapsed:.1f}s)")
                     return job
                 
                 if status == 'failed':
@@ -587,7 +587,7 @@ class GAEOrchestrator:
                 
                 if state in ['done', 'finished', 'completed']:
                     elapsed = time.time() - start_time
-                    self._log(f"  ✓ {description} completed ({elapsed:.1f}s)")
+                    self._log(f"  OK: {description} completed ({elapsed:.1f}s)")
                     return job
                 
                 if state in ['failed', 'error']:
@@ -623,9 +623,9 @@ class GAEOrchestrator:
             results.append(result)
             
             if result.status == AnalysisStatus.COMPLETED:
-                self._log(f"✓ Completed {i}/{len(configs)}")
+                self._log(f"OK: Completed {i}/{len(configs)}")
             else:
-                self._log(f"✗ Failed {i}/{len(configs)}: {result.error_message}")
+                self._log(f"ERROR: Failed {i}/{len(configs)}: {result.error_message}")
         
         # Final summary
         self._log(f"\n=== Batch Complete ===")

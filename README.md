@@ -1,6 +1,6 @@
 # Graph Analytics Orchestrator
 
-A unified Python library for orchestrating ArangoDB Graph Analytics Engine (GAE) operations across both Arango Managed Platform (AMP) and self-managed deployments. Scope is limited to GAE orchestration (deploy → load → analyze → store → cleanup); LLM/agentic workflows and PRD/use-case generation are out of scope.
+A unified Python library for orchestrating ArangoDB Graph Analytics Engine (GAE) operations across both Arango Managed Platform (AMP) and self-managed deployments. Scope is limited to GAE orchestration (deploy -> load -> analyze -> store -> cleanup); LLM/agentic workflows and PRD/use-case generation are out of scope.
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -8,7 +8,7 @@ A unified Python library for orchestrating ArangoDB Graph Analytics Engine (GAE)
 ## Features
 
 - **Unified Interface** - Single API for both AMP and self-managed deployments
-- **Complete Automation** - Full workflow orchestration (deploy → load → analyze → store → cleanup)
+- **Complete Automation** - Full workflow orchestration (deploy -> load -> analyze -> store -> cleanup)
 - **Multiple Algorithms** - Support for PageRank, WCC, SCC, Label Propagation, and more
 - **Result Management** - Index management, validation, comparison, and batch operations
 - **Query Helpers** - Cross-reference results, find top influential vertices, join with vertex details
@@ -194,15 +194,15 @@ for result in results:
 
 ```
 graph_analytics_orchestrator/
-├── __init__.py          # Public API
-├── config.py            # Configuration management
-├── db_connection.py     # ArangoDB connection
-├── gae_connection.py    # GAE connection (AMP & self-managed)
-├── gae_orchestrator.py  # Workflow orchestration
-├── results.py           # Result collection management & batch operations
-├── queries.py           # Result query helpers
-├── export.py            # Export utilities (CSV, JSON)
-└── utils.py             # Utility functions
+|-- __init__.py          # Public API
+|-- config.py            # Configuration management
+|-- db_connection.py     # ArangoDB connection
+|-- gae_connection.py    # GAE connection (AMP & self-managed)
+|-- gae_orchestrator.py  # Workflow orchestration
+|-- results.py           # Result collection management & batch operations
+|-- queries.py           # Result query helpers
+|-- export.py            # Export utilities (CSV, JSON)
+`-- utils.py             # Utility functions
 ```
 
 ### Deployment Models
