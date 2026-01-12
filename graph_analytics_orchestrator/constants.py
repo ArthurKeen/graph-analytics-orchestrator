@@ -50,6 +50,5 @@ ICON_ERROR = "[ERROR]"
 ICON_WARNING = "[WARNING]"
 
 # Job Status Values (for normalization)
-COMPLETED_STATES = ['done', 'finished', 'completed', 'succeeded']
-FAILED_STATES = ['failed', 'error']
-
+COMPLETED_STATES = ["done", "finished", "completed", "succeeded"]
+FAILED_STATES = ["failed", "error"]

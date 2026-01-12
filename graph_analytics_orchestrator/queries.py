@@ -18,14 +18,14 @@ def cross_reference_results(
     filter1: Optional[str] = None,
     filter2: Optional[str] = None,
     join_fields: Optional[Dict[str, str]] = None,
-    limit: Optional[int] = None
+    limit: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
     """
     Cross-reference two result collections by 'id' field.
-    
+
     Common use case: Join PageRank and WCC results to find influential
     vertices in connected components.
-    
+
     Args:
         db: ArangoDB database connection
         collection1: First result collection name
@@ -35,10 +35,10 @@ def cross_reference_results(
         join_fields: Optional dict mapping collection1 fields to collection2 fields
                     (defaults to {'id': 'id'})
         limit: Optional limit on number of results
-        
+
     Returns:
         List of joined result documents
-        
+
     Example:
         # Find top PageRank vertices in connected component
         results = cross_reference_results(
@@ -51,16 +51,16 @@ def cross_reference_results(
         )
     """
     if join_fields is None:
-        join_fields = {'id': 'id'}
-    
+        join_fields = {"id": "id"}
+
     # Build query
     filter1_clause = f"FILTER {filter1}" if filter1 else ""
     filter2_clause = f"FILTER {filter2}" if filter2 else ""
     limit_clause = f"LIMIT {limit}" if limit else ""
-    
+
     # Get join key fields
     key1, key2 = list(join_fields.items())[0]
-    
+
     query = f"""
     FOR r1 IN {collection1}
       {filter1_clause}
@@ -78,27 +78,27 @@ def cross_reference_results(
       }}
       {limit_clause}
     """
-    
+
     return list(db.aql.execute(query))
 
 
 def get_top_influential_connected(
     db: StandardDatabase,
-    pagerank_collection: str = 'pagerank_results',
-    wcc_collection: str = 'wcc_results',
+    pagerank_collection: str = "pagerank_results",
+    wcc_collection: str = "wcc_results",
     component_id: Optional[str] = None,
     min_influence: Optional[float] = None,
     limit: int = 100,
     include_vertex_details: bool = False,
-    vertex_collection: str = 'nodes',
-    vertex_fields: Optional[List[str]] = None
+    vertex_collection: str = "nodes",
+    vertex_fields: Optional[List[str]] = None,
 ) -> List[Dict[str, Any]]:
     """
     Get top influential vertices who are in the connected component.
-    
+
     This is a specialized helper for the common pattern of finding top PageRank
     vertices who are also in the main connected WCC component.
-    
+
     Args:
         db: ArangoDB database connection
         pagerank_collection: PageRank results collection name
@@ -109,7 +109,7 @@ def get_top_influential_connected(
         include_vertex_details: Whether to join with vertex collection for details
         vertex_collection: Vertex collection name if including details
         vertex_fields: Optional list of vertex fields to include
-        
+
     Returns:
         List of influential connected vertices
     """
@@ -127,26 +127,28 @@ def get_top_influential_connected(
         if not components:
             return []
         component_id = components[0]
-    
+
     # Build filter clauses
-    influence_filter = f"AND pr.pagerank_influence >= {min_influence}" if min_influence else ""
-    
+    influence_filter = (
+        f"AND pr.pagerank_influence >= {min_influence}" if min_influence else ""
+    )
+
     # Build vertex join if requested
     if include_vertex_details:
         if vertex_fields is None:
-            vertex_fields = ['full_name', 'category', 'email']
-        
+            vertex_fields = ["full_name", "category", "email"]
+
         vertex_selects = []
         for field in vertex_fields:
-            parts = field.split('.')
+            parts = field.split(".")
             vertex_selects.append(f"{parts[-1]}: person.{field}")
-        
+
         person_join = "LET person = DOCUMENT(pr.id)"
-        person_return = ', '.join(vertex_selects) + ','
+        person_return = ", ".join(vertex_selects) + ","
     else:
         person_join = ""
         person_return = ""
-    
+
     query = f"""
     FOR pr IN {pagerank_collection}
       SORT pr.pagerank_influence DESC
@@ -166,21 +168,21 @@ def get_top_influential_connected(
         in_connected_network: true
       }}
     """
-    
-    return list(db.aql.execute(query, bind_vars={'component_id': component_id}))
+
+    return list(db.aql.execute(query, bind_vars={"component_id": component_id}))
 
 
 def get_results_with_details(
     db: StandardDatabase,
     result_collection: str,
-    vertex_collection: str = 'nodes',
+    vertex_collection: str = "nodes",
     result_filter: Optional[str] = None,
     fields: Optional[List[str]] = None,
-    limit: Optional[int] = None
+    limit: Optional[int] = None,
 ) -> List[Dict[str, Any]]:
     """
     Get result collection data joined with vertex details.
-    
+
     Args:
         db: ArangoDB database connection
         result_collection: Result collection name (e.g., 'pagerank_results')
@@ -188,10 +190,10 @@ def get_results_with_details(
         result_filter: Optional AQL filter for results (e.g., "r.pagerank_influence >= 0.000002")
         fields: Optional list of vertex fields to include (if None, includes common fields)
         limit: Optional limit on results
-        
+
     Returns:
         List of result documents with vertex details
-        
+
     Example:
         # Get top PageRank results with vertex names
         results = get_results_with_details(
@@ -203,19 +205,19 @@ def get_results_with_details(
         )
     """
     if fields is None:
-        fields = ['full_name', 'category', 'email']
-    
+        fields = ["full_name", "category", "email"]
+
     # Build field accessors
     field_returns = []
     for field in fields:
-        parts = field.split('.')
-        accessor = 'person.' + field
+        parts = field.split(".")
+        accessor = "person." + field
         field_returns.append(f"{parts[-1]}: {accessor}")
-    
-    field_join = ', '.join(field_returns)
+
+    field_join = ", ".join(field_returns)
     filter_clause = f"FILTER {result_filter}" if result_filter else ""
     limit_clause = f"LIMIT {limit}" if limit else ""
-    
+
     query = f"""
     FOR r IN {result_collection}
       {filter_clause}
@@ -228,6 +230,5 @@ def get_results_with_details(
       }}
       {limit_clause}
     """
-    
-    return list(db.aql.execute(query))
 
+    return list(db.aql.execute(query))
